@@ -1,0 +1,107 @@
+<project_structure>
+.
+├── .DS_Store
+├── .gitignore
+├── .prettierrc
+├── ai_context
+├── ecosystem.config.js
+├── eslint.config.mjs
+├── nest-cli.json
+├── package-lock.json
+├── package.json
+├── public
+│   └── index.html
+├── scripts
+│   ├── generate-context.ts
+│   └── test-api.js
+├── src
+│   ├── .DS_Store
+│   ├── app.module.ts
+│   ├── assets
+│   │   └── images
+│   │       ├── clean_stamp.png
+│   │       ├── logo_lim.png
+│   │       ├── ttd-ketua.png
+│   │       ├── ttd-ketua1.png
+│   │       ├── ttd-sekre1.png
+│   │       └── ttd-sekretaris.png
+│   ├── main.ts
+│   ├── qr-generator
+│   │   ├── qr-generator.controller.ts
+│   │   ├── qr-generator.module.ts
+│   │   └── qr-generator.service.ts
+│   ├── signature
+│   │   ├── .DS_Store
+│   │   ├── signature.module.ts
+│   │   └── signature.service.ts
+│   ├── stamp
+│   │   ├── stamp.module.ts
+│   │   └── stamp.service.ts
+│   └── utils
+│       ├── date.util.ts
+│       ├── file-storage.service.ts
+│       └── utils.module.ts
+├── tsconfig.build.json
+├── tsconfig.json
+└── uploads
+    ├── .DS_Store
+    ├── documents
+    │   └── .DS_Store
+    ├── images
+    │   └── .DS_Store
+    ├── ketua
+    │   └── .DS_Store
+    ├── sekretaris
+    │   └── .DS_Store
+    ├── signatures
+    │   ├── .DS_Store
+    │   ├── 001-PP-A-IV-2026_1775854541779_ketua.png
+    │   ├── 001-PP-A-IV-2026_1775854541779_sekretaris.png
+    │   ├── 001-PP-A-IV-2026_1775854941075_ketua.png
+    │   ├── 001-PP-A-IV-2026_1775854941075_sekretaris.png
+    │   ├── 001-PP-A-IV-2026_1775854957332_ketua.png
+    │   ├── 001-PP-A-IV-2026_1775854957332_sekretaris.png
+    │   ├── 001-PP-A-IV-2026_1775855046361_ketua.png
+    │   ├── 001-PP-A-IV-2026_1775855046361_sekretaris.png
+    │   ├── 001-PP-A-IV-2026_1775855047773_ketua.png
+    │   ├── 001-PP-A-IV-2026_1775855047773_sekretaris.png
+    │   ├── 001-PP-A-IV-2026_1775855048720_ketua.png
+    │   ├── 001-PP-A-IV-2026_1775855048720_sekretaris.png
+    │   ├── 002-PP-A-IV-2026_1775854542098_ketua.png
+    │   ├── 002-PP-A-IV-2026_1775854542098_sekretaris.png
+    │   ├── 002-PP-A-IV-2026_1775854957484_ketua.png
+    │   ├── 002-PP-A-IV-2026_1775854957484_sekretaris.png
+    │   ├── 003-PP-A-IV-2026_1775854542114_ketua.png
+    │   ├── 003-PP-A-IV-2026_1775854542114_sekretaris.png
+    │   ├── 003-PP-A-IV-2026_1775854957502_ketua.png
+    │   └── 003-PP-A-IV-2026_1775854957502_sekretaris.png
+    ├── stamp
+    │   └── .DS_Store
+    ├── stamps
+    │   ├── .DS_Store
+    │   ├── 001-PP-A-IV-2026_1775854541779_stempel.png
+    │   ├── 001-PP-A-IV-2026_1775854941075_stempel.png
+    │   ├── 001-PP-A-IV-2026_1775854957332_stempel.png
+    │   ├── 001-PP-A-IV-2026_1775855046361_stempel.png
+    │   ├── 001-PP-A-IV-2026_1775855047773_stempel.png
+    │   ├── 001-PP-A-IV-2026_1775855048720_stempel.png
+    │   ├── 002-PP-A-IV-2026_1775854542098_stempel.png
+    │   ├── 002-PP-A-IV-2026_1775854957484_stempel.png
+    │   ├── 003-PP-A-IV-2026_1775854542114_stempel.png
+    │   └── 003-PP-A-IV-2026_1775854957502_stempel.png
+    └── zips
+        ├── .DS_Store
+        ├── 001-PP-A-IV-2026_1775854541779.zip
+        ├── 001-PP-A-IV-2026_1775854941075.zip
+        ├── 001-PP-A-IV-2026_1775854957332.zip
+        ├── 001-PP-A-IV-2026_1775855046361.zip
+        ├── 001-PP-A-IV-2026_1775855047773.zip
+        ├── 001-PP-A-IV-2026_1775855048720.zip
+        ├── 002-PP-A-IV-2026_1775854542098.zip
+        ├── 002-PP-A-IV-2026_1775854957484.zip
+        ├── 003-PP-A-IV-2026_1775854542114.zip
+        └── 003-PP-A-IV-2026_1775854957502.zip
+
+20 directories, 82 files
+
+</project_structure>

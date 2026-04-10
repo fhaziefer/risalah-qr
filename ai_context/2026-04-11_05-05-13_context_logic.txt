@@ -1,0 +1,710 @@
+<context_dump>
+
+<file path="src/app.module.ts">
+// src/app.module.ts
+
+import { Module } from '@nestjs/common';
+import { ConfigModule } from '@nestjs/config';
+import { QRGeneratorModule } from './qr-generator/qr-generator.module';
+
+@Module({
+  imports: [
+    ConfigModule.forRoot({ isGlobal: true, envFilePath: '.env' }),
+    QRGeneratorModule,
+  ],
+})
+export class AppModule {}
+
+</file>
+
+<file path="src/main.ts">
+// src/main.ts
+// Import core NestJS factory dan module
+import { NestFactory } from '@nestjs/core';
+// Import root application module
+import { AppModule } from './app.module';
+import { NestExpressApplication } from '@nestjs/platform-express';
+import { join } from 'path';
+
+async function bootstrap() {
+  // 1. Membuat instance aplikasi NestJS
+  const app = await NestFactory.create<NestExpressApplication>(AppModule);
+
+  // 4. Setting Cors
+  app.enableCors({
+    origin: true,
+    methods: ['GET', 'POST', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization'],
+    credentials: true
+  });
+
+  // Serve static files
+  app.useStaticAssets(join(process.cwd(), 'uploads'), {
+    prefix: '/uploads/',
+  });
+
+  // Serve static files untuk frontend
+  app.useStaticAssets(join(process.cwd(), 'public'));
+
+  // 4. Start aplikasi
+  await app.listen(process.env.PORT ?? 3000); // Gunakan PORT dari env atau default 3000
+
+  // 5. Log informasi startup
+  console.log(`App running on PORT: ${process.env.PORT || 3000}`);
+}
+
+// 5. Jalankan aplikasi
+bootstrap();
+</file>
+
+<file path="src/qr-generator/qr-generator.controller.ts">
+// src/qr-generator/qr-generator.controller.ts
+
+import { Controller, Post, Body } from '@nestjs/common';
+import { QRGeneratorService } from './qr-generator.service';
+
+@Controller('generateQR')
+export class QRGeneratorController {
+    constructor(private readonly qrService: QRGeneratorService) { }
+
+    @Post()
+    async generateQR(@Body() body: any) {
+        try {
+            // Validasi input dasar
+            if (!body.nomorSurat || !body.kodeKepengurusan || !body.kodeSurat || !body.tingkatKepengurusan || !body.daerahKepengurusan || !body.ketua || !body.sekretaris || !body.ketuaName || !body.sekretarisName) {
+                throw new Error('Missing required fields');
+            }
+
+            const result = await this.qrService.generateAllFiles(body);
+
+            return {
+                status: 'success',
+                data: {
+                    kodeSurat: result.kodeSurat,
+                    zipUrl: result.zip,
+                    generatedAt: result.generatedAt
+                }
+            };
+        } catch (error) {
+            // 1. Log error asalnya
+            console.error('QR Generation Error:', error);
+
+            // 2. Lakukan pengecekan tipe
+            const errorMessage = error instanceof Error ? error.message : 'Terjadi kesalahan yang tidak diketahui';
+
+            return {
+                status: 'error',
+                error: 'QR_GENERATION_FAILED',
+                message: errorMessage,
+                timestamp: new Date().toISOString()
+            };
+        }
+    }
+
+    @Post('bulk')
+    async generateBulkQR(@Body() body: {
+        nomorSurat: string[];
+        kodeSurat: string;
+        kodeKepengurusan: string;
+        ketua: string;
+        ketuaName: string;
+        sekretaris: string;
+        sekretarisName: string;
+        tingkatKepengurusan: string;
+        daerahKepengurusan: string;
+    }) {
+        try {
+            const results = await this.qrService.generateBulkFiles(body);
+            return {
+                status: 'success',
+                files: results
+            };
+        } catch (error) {
+            // 1. Log error asalnya
+            console.error('QR Generation Error:', error);
+
+            // 2. Lakukan pengecekan tipe
+            const errorMessage = error instanceof Error ? error.message : 'Terjadi kesalahan yang tidak diketahui';
+
+            return {
+                status: 'error',
+                error: 'QR_GENERATION_FAILED',
+                message: errorMessage,
+                timestamp: new Date().toISOString()
+            };
+        }
+    }
+
+}
+</file>
+
+<file path="src/qr-generator/qr-generator.module.ts">
+// src/qr-generator/qr-generator.module.ts
+
+import { Module } from '@nestjs/common';
+import { QRGeneratorController } from './qr-generator.controller';
+import { QRGeneratorService } from './qr-generator.service';
+import { StampModule } from '../stamp/stamp.module';
+import { SignatureModule } from '../signature/signature.module';
+import { UtilsModule } from '../utils/utils.module';
+
+@Module({
+    imports: [
+        StampModule,         // Module untuk layanan stamp
+        SignatureModule,     // Module untuk layanan signature
+        UtilsModule          // Module untuk utilitas file storage
+    ],
+    controllers: [QRGeneratorController],
+    providers: [QRGeneratorService],
+    exports: [QRGeneratorService] // Diexport jika akan digunakan di module lain
+})
+export class QRGeneratorModule { }
+</file>
+
+<file path="src/qr-generator/qr-generator.service.ts">
+// src/qr-generator/qr-generator.service.ts
+
+import { Injectable } from '@nestjs/common';
+import { StampService } from '../stamp/stamp.service';
+import { SignatureService } from '../signature/signature.service';
+import { FileStorageService } from '../utils/file-storage.service';
+import { formatIndonesianDate, getRomanMonth, getCurrentYear } from '../utils/date.util';
+import { ConfigService } from '@nestjs/config';
+
+@Injectable()
+export class QRGeneratorService {
+    constructor(
+        private configService: ConfigService,
+        private readonly stampService: StampService,
+        private readonly signatureService: SignatureService,
+        private readonly fileStorage: FileStorageService,
+    ) { }
+
+    async generateAllFiles(body: any) {
+        const dateNow = new Date();
+        const formattedIndonesianDate = formatIndonesianDate(dateNow);
+        const currentYear = getCurrentYear();
+        const romanMonth = getRomanMonth();
+        const kodeSurat = `${body.nomorSurat}/${body.kodeKepengurusan}/${body.kodeSurat}/${romanMonth}/${currentYear}`;
+        const nomorSanitized = this.fileStorage.sanitizeNomorSurat(kodeSurat);
+        const timestamp = Date.now();
+
+        if (!body.nomorSurat || !body.kodeKepengurusan || !body.kodeSurat || !body.tingkatKepengurusan || !body.daerahKepengurusan || !body.ketua || !body.sekretaris || !body.ketuaName || !body.sekretarisName) {
+            throw new Error('Data required fields are missing');
+        }
+
+        // Generate semua buffer sekaligus
+        const [stampBuffer, ketuaBuffer, sekretarisBuffer] = await Promise.all([
+            this.stampService.generateQRCodeWithStamp(
+                kodeSurat,
+                body.tingkatKepengurusan,
+                body.daerahKepengurusan,
+            ),
+            this.signatureService.generateSignature(
+                kodeSurat,
+                body.tingkatKepengurusan,
+                body.daerahKepengurusan,
+                body.ketua,
+                body.ketuaName
+            ),
+            this.signatureService.generateSignature(
+                kodeSurat,
+                body.tingkatKepengurusan,
+                body.daerahKepengurusan,
+                body.sekretaris,
+                body.sekretarisName
+            )
+        ]);
+
+        [stampBuffer, ketuaBuffer, sekretarisBuffer].forEach((buffer, index) => {
+            if (!buffer || buffer.length === 0) {
+                throw new Error(`Failed to generate ${['stamp', 'ketua', 'sekretaris'][index]} file`);
+            }
+        });
+
+        // Format nama file
+        const filePrefix = `${nomorSanitized}_${timestamp}`;
+        const files = {
+            stamp: {
+                name: `${filePrefix}_stempel.png`,
+                buffer: stampBuffer
+            },
+            ketua: {
+                name: `${filePrefix}_ketua.png`,
+                buffer: ketuaBuffer
+            },
+            sekretaris: {
+                name: `${filePrefix}_sekretaris.png`,
+                buffer: sekretarisBuffer
+            }
+        };
+
+        // Simpan semua file individu
+        const [stampPath, ketuaPath, sekretarisPath] = await Promise.all([
+            this.fileStorage.saveFile(files.stamp.buffer, 'stamps', files.stamp.name, 'image/png'),
+            this.fileStorage.saveFile(files.ketua.buffer, 'signatures', files.ketua.name, 'image/png'),
+            this.fileStorage.saveFile(files.sekretaris.buffer, 'signatures', files.sekretaris.name, 'image/png')
+        ]);
+
+        // Buat file ZIP
+        const zipFileName = `${filePrefix}`;
+        const zipPath = await this.fileStorage.saveZip(
+            Object.values(files),
+            'zips',
+            zipFileName
+        );
+
+        // Siapkan URL
+        const baseUrl = this.configService.get('BASE_URL') || 'http://localhost:3000';
+
+        return {
+            individual: {
+                stamp: `${baseUrl}/uploads/${stampPath}`,
+                ketua: `${baseUrl}/uploads/${ketuaPath}`,
+                sekretaris: `${baseUrl}/uploads/${sekretarisPath}`
+            },
+            zip: `${baseUrl}/uploads/${zipPath}`,
+            generatedAt: formattedIndonesianDate,
+            kodeSurat: kodeSurat,
+            paths: {
+                stamp: stampPath,
+                ketua: ketuaPath,
+                sekretaris: sekretarisPath,
+                zip: zipPath
+            }
+        };
+    }
+
+    async generateBulkFiles(bulkBody: any) {
+        return Promise.all(
+            bulkBody.nomorSurat.map(async (nomor: string) => {
+                const singleBody = {
+                    ...bulkBody,
+                    nomorSurat: nomor
+                };
+                try {
+                    const result = await this.generateAllFiles(singleBody);
+                    return {
+                        nomorSurat: nomor,
+                        ...result
+                    };
+                } catch (error) {
+                    const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+                    return {
+                        nomorSurat: nomor,
+                        error: errorMessage
+                    };
+                }
+            })
+        );
+    }
+}
+</file>
+
+<file path="src/signature/signature.module.ts">
+// src/signature/signature.module.ts
+
+import { Module } from '@nestjs/common';
+import { SignatureService } from './signature.service';
+
+@Module({
+    providers: [SignatureService],
+    exports: [SignatureService],
+})
+export class SignatureModule { }
+
+</file>
+
+<file path="src/signature/signature.service.ts">
+// src/signature/signature.service.ts
+
+import { Injectable } from '@nestjs/common';
+import { createCanvas } from 'canvas';
+import * as QRCode from 'qrcode';
+import { formatFullDate } from '../utils/date.util';
+
+@Injectable()
+export class SignatureService {
+    /**
+     * Generates a QR code containing the standard signature text
+     * @returns Buffer of the QR code image in PNG format
+     */
+    async generateSignature(nomorSurat: string, tingkatKepengurusan: string, daerahKepengurusan: string, jabatan: string, signatureName: string): Promise<Buffer> {
+        const dateNow = new Date();
+        const formattedDate = formatFullDate(dateNow);
+        const size = 600; // QR code size (600x600 pixels)
+        const canvas = createCanvas(size, size);
+
+        // The standard text to encode in QR code
+        const signatureText = `Surat nomor ${nomorSurat} resmi diterbitkan oleh ${tingkatKepengurusan} Lembaga Ittihadul Muballighin ${daerahKepengurusan}, ditandatangai oleh ${jabatan} ${signatureName} pada ${formattedDate}`;
+
+        // Generate QR code with the signature text
+        await QRCode.toCanvas(canvas, signatureText, {
+            errorCorrectionLevel: 'H', // High error correction
+            margin: 0,                 // Small margin
+            width: size,              // Full canvas size
+            color: {
+                dark: '#056bb0',      // Same blue color as before
+                light: '#ffffff',     // White background
+            },
+        });
+
+        return canvas.toBuffer('image/png');
+    }
+}
+</file>
+
+<file path="src/stamp/stamp.module.ts">
+// src/stamp/stamp.module.ts
+
+import { Module } from '@nestjs/common';
+import { StampService } from './stamp.service';
+
+@Module({
+    providers: [StampService],
+    exports: [StampService],
+})
+export class StampModule { }
+
+</file>
+
+<file path="src/stamp/stamp.service.ts">
+// src/stamp/stamp.service.ts
+
+import { Injectable } from '@nestjs/common';
+import { createCanvas, loadImage, CanvasRenderingContext2D } from 'canvas';
+import { formatFullDate } from '../utils/date.util';
+import * as QRCode from 'qrcode';
+import * as path from 'path';
+import * as fs from 'fs'; // <-- Tambahkan ini
+
+@Injectable()
+export class StampService {
+  /**
+   * Menghitung sudut awal dan akhir untuk teks melingkar berdasarkan panjang teks
+   */
+  private calculateTextAngles(
+    text: string,
+    ctx: CanvasRenderingContext2D,
+    radius: number,
+    isBottom: boolean
+  ) {
+    const textWidth = ctx.measureText(text).width;
+    const circumference = 2 * Math.PI * radius;
+
+    const angleRangeRad = (textWidth / circumference) * (2 * Math.PI);
+    let angleRangeDeg = angleRangeRad * (180 / Math.PI);
+
+    angleRangeDeg = Math.min(140, angleRangeDeg * 1.1);
+
+    if (isBottom) {
+      return {
+        startAngle: 90 - angleRangeDeg / 2,
+        endAngle: 90 + angleRangeDeg / 2,
+      };
+    }
+
+    return {
+      startAngle: 270 - angleRangeDeg / 2,
+      endAngle: 270 + angleRangeDeg / 2,
+    };
+  }
+
+  /**
+   * Menggambar teks melingkar di sekitar titik pusat
+   */
+  private drawCircularText(
+    ctx: CanvasRenderingContext2D,
+    text: string,
+    centerX: number,
+    centerY: number,
+    radius: number,
+    isBottom: boolean = false,
+    margin: number = 0
+  ) {
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.fillStyle = '#056bb0';
+
+    const fontSize = Math.min(36, radius * 0.2);
+    ctx.font = `bold ${fontSize}px Arial`;
+
+    const angles = this.calculateTextAngles(text, ctx, radius - margin, isBottom);
+    const { startAngle, endAngle } = angles;
+    const angleRange = endAngle - startAngle;
+
+    const angleRad = (angle: number) => (angle * Math.PI) / 180;
+
+    const chars = text.split('');
+
+    chars.forEach((char, i) => {
+      const progress = i / Math.max(1, chars.length - 1);
+      const angle = angleRad(startAngle + angleRange * progress);
+
+      const x = centerX + (radius - margin) * Math.cos(angle);
+      const y = centerY + (radius - margin) * Math.sin(angle);
+
+      ctx.save();
+      ctx.translate(x, y);
+
+      if (isBottom) {
+        ctx.rotate(angle - Math.PI / 2);
+      } else {
+        ctx.rotate(angle + Math.PI / 2);
+      }
+
+      ctx.fillText(char, 0, 0);
+      ctx.restore();
+    });
+  }
+
+  /**
+   * Membuat stempel dinamis dengan teks melingkar
+   */
+  async generateDynamicStamp(topText: string, bottomText: string): Promise<Buffer> {
+    // Jalur anti-gagal (Bulletproof pathing)
+    let cleanStampPath = path.join(process.cwd(), 'src/assets/images/clean_stamp.png');
+
+    // Fallback: Jika dijalankan di production dan folder src tidak ada, ambil dari dist
+    if (!fs.existsSync(cleanStampPath)) {
+      cleanStampPath = path.join(process.cwd(), 'dist/assets/images/clean_stamp.png');
+    }
+
+    // Load image
+    const cleanStampImage = await loadImage(cleanStampPath);
+
+    const stampSize = 600;
+    const canvas = createCanvas(stampSize, stampSize);
+    const ctx = canvas.getContext('2d');
+
+    ctx.drawImage(cleanStampImage, 0, 0, stampSize, stampSize);
+
+    const baseRadius = stampSize * 0.38;
+
+    this.drawCircularText(
+      ctx,
+      topText.toUpperCase(),
+      stampSize / 2,
+      stampSize / 2,
+      baseRadius,
+      false,
+      0
+    );
+
+    const bottomTextReverse = bottomText.split('').reverse().join('');
+
+    this.drawCircularText(
+      ctx,
+      bottomTextReverse.toUpperCase(),
+      stampSize / 2,
+      stampSize / 2,
+      baseRadius,
+      true,
+      0
+    );
+
+    return canvas.toBuffer('image/png');
+  }
+
+  /**
+   * Membuat QR Code dengan stempel di tengah
+   */
+  async generateQRCodeWithStamp(
+    kodeSurat: string,
+    topText: string,
+    bottomText: string
+  ): Promise<Buffer> {
+    const size = 600;
+    const canvas = createCanvas(size, size);
+    const ctx = canvas.getContext('2d');
+
+    const formattedDate = formatFullDate(new Date());
+    const stampText = `Surat nomor ${kodeSurat} resmi diterbitkan oleh ${topText} Lembaga Ittihadul Muballighin ${bottomText} pada ${formattedDate}`;
+
+    ctx.fillStyle = '#ffffff';
+    ctx.fillRect(0, 0, size, size);
+
+    await QRCode.toCanvas(canvas, stampText, {
+      errorCorrectionLevel: 'H',
+      margin: 0,
+      width: size,
+      color: {
+        dark: '#056bb0',
+        light: '#ffffff',
+      },
+    });
+
+    const dynamicStamp = await this.generateDynamicStamp(topText, bottomText);
+    const stampImage = await loadImage(dynamicStamp);
+
+    const stampSize = size * 0.45;
+    const x = (size - stampSize) / 2;
+    const y = (size - stampSize) / 2;
+
+    ctx.beginPath();
+    ctx.arc(size / 2, size / 2, stampSize / 2 + 10, 0, Math.PI * 2);
+    ctx.fillStyle = '#ffffff';
+    ctx.fill();
+
+    ctx.drawImage(stampImage, x, y, stampSize, stampSize);
+
+    return canvas.toBuffer('image/png');
+  }
+}
+
+</file>
+
+<file path="src/utils/date.util.ts">
+// src/utils/date.util.ts
+
+export function formatFullDate(date: Date): string {
+    const day = String(date.getDate()).padStart(2, '0');
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const year = date.getFullYear();
+
+    const hours = String(date.getHours()).padStart(2, '0');
+    const minutes = String(date.getMinutes()).padStart(2, '0');
+    const seconds = String(date.getSeconds()).padStart(2, '0');
+
+    return `${day}/${month}/${year} ${hours}:${minutes}:${seconds}`;
+}
+
+export function formatIndonesianDate(date: Date): string {
+    const days = ['Ahad', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu'];
+    const months = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
+
+    const dayName = days[date.getDay()];
+    const day = date.getDate();
+    const monthName = months[date.getMonth()];
+    const year = date.getFullYear();
+
+    const hours = String(date.getHours()).padStart(2, '0');
+    const minutes = String(date.getMinutes()).padStart(2, '0');
+
+    return `${dayName}, ${day} ${monthName} ${year}, Pukul ${hours}.${minutes} WIB`;
+}
+
+
+export function getCurrentYear(): number {
+    const now = new Date();
+    return now.getFullYear();
+}
+
+export function getRomanMonth(): string {
+    const romanMonths = [
+        'I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII', 'IX', 'X', 'XI', 'XII'
+    ];
+    const now = new Date();
+    return romanMonths[now.getMonth()];
+}
+</file>
+
+<file path="src/utils/file-storage.service.ts">
+// src/utils/file-storage.service.ts
+
+import { Injectable } from '@nestjs/common';
+import * as fsp from 'fs/promises';
+import * as path from 'path';
+import * as fs from 'fs';
+import archiver from 'archiver';
+
+@Injectable()
+export class FileStorageService {
+    public sanitizeNomorSurat(nomorSurat: string): string {
+        return nomorSurat.replace(/[\/\\]/g, '-');
+    }
+
+    private sanitizeFolderName(folder: string): string {
+        return folder.replace(/[^a-zA-Z0-9_-]/g, '');
+    }
+
+    async saveFile(buffer: Buffer, folder: string, filename: string, mimeType: string): Promise<string> {
+        // Sanitasi folder
+        const safeFolder = this.sanitizeFolderName(folder);
+
+        // Tetapkan ekstensi
+        let extension = '.png';
+        switch (mimeType) {
+            case 'image/jpeg':
+            case 'image/jpg':
+                extension = '.jpg';
+                break;
+            case 'application/pdf':
+                extension = '.pdf';
+                break;
+        }
+
+        // Sanitasi filename
+        const baseFilename = filename.replace(/\.[^/.]+$/, ""); // Hapus ekstensi lama
+        const sanitizedBase = baseFilename.replace(/[^a-zA-Z0-9_.-]/g, '_');
+        const finalFilename = `${sanitizedBase}${extension}`;
+
+        // Buat direktori
+        const dirPath = path.join(process.cwd(), 'uploads', safeFolder);
+        await fsp.mkdir(dirPath, { recursive: true });
+
+        // Tulis file
+        const filePath = path.join(dirPath, finalFilename);
+        await fsp.writeFile(filePath, buffer);
+
+        return path.join(safeFolder, finalFilename).replace(/\\/g, '/');
+    }
+
+    async saveZip(files: Array<{ name: string; buffer: Buffer }>, folder: string, zipFileName: string): Promise<string> {
+        // Sanitasi input
+        const safeFolder = this.sanitizeFolderName(folder);
+        const sanitizedZipName = zipFileName.replace(/[^a-zA-Z0-9_.-]/g, '_') + '.zip';
+
+        // Path lengkap
+        const dirPath = path.join(process.cwd(), 'uploads', safeFolder);
+        const zipFilePath = path.join(dirPath, sanitizedZipName);
+
+        // Buat direktori
+        await fsp.mkdir(dirPath, { recursive: true });
+
+        return new Promise((resolve, reject) => {
+            const output = fs.createWriteStream(zipFilePath);
+            const archive = archiver('zip', { zlib: { level: 9 } });
+
+            // Handle error
+            output.on('error', (err) => reject(err));
+            archive.on('error', (err) => reject(err));
+
+            // Setup pipeline
+            archive.pipe(output);
+
+            // Tambahkan file
+            files.forEach(file => {
+                const safeFileName = file.name.replace(/[^a-zA-Z0-9_.-]/g, '_');
+                archive.append(file.buffer, { name: safeFileName });
+            });
+
+            // Finalisasi
+            archive.finalize();
+
+            // Resolve path
+            output.on('close', () => {
+                resolve(path.join(safeFolder, sanitizedZipName).replace(/\\/g, '/'));
+            });
+        });
+    }
+}
+</file>
+
+<file path="src/utils/utils.module.ts">
+// src/utils/utils.module.ts
+
+import { Module } from '@nestjs/common';
+import { FileStorageService } from '../utils/file-storage.service';
+
+@Module({
+    providers: [
+        FileStorageService // Langsung register di sini
+    ],
+    exports: [
+        FileStorageService // Ekspor agar bisa digunakan di modul lain
+    ]
+})
+export class UtilsModule { }
+</file>
+</context_dump>

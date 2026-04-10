@@ -64,6 +64,7 @@ build/
 # System Files
 .DS_Store
 Thumbs.db
+Thumbs.db:encryptable
 
 # NestJS specific
 *.compiled-*
@@ -73,16 +74,25 @@ Thumbs.db
 /test-results/
 /reports/
 
-# Package manager specific
-package-lock.json
-yarn.lock
-pnpm-lock.yaml
-shrinkwrap.json
-
 # Optional local development files
 *.local
 *.bak
 *.tmp
 
-# Uploads Folder
-uploads/
+# =========================================
+# PROJECT SPECIFIC FOLDERS (JANGAN DIHAPUS)
+# =========================================
+
+# Folder penyimpanan gambar/zip hasil generate
+# Kita abaikan isinya, tapi biarkan foldernya (opsional: tambahkan .gitkeep di dalam folder ini jika ingin foldernya ter-push)
+uploads/*
+!uploads/.gitkeep
+
+# Folder scripts jika tidak ingin di-push (opsional)
+# scripts/
+
+# Jangan ignore package-lock.json (PENTING UNTUK DEPLOYMENT KE RENDER/VPS)
+# package-lock.json 
+# yarn.lock
+# pnpm-lock.yaml
+# shrinkwrap.json

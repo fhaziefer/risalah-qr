@@ -1,3 +1,5 @@
+// src/signature/signature.service.ts
+
 import { Injectable } from '@nestjs/common';
 import { createCanvas } from 'canvas';
 import * as QRCode from 'qrcode';
@@ -9,7 +11,7 @@ export class SignatureService {
      * Generates a QR code containing the standard signature text
      * @returns Buffer of the QR code image in PNG format
      */
-    async generateSignature(nomorSurat: String, tingkatKepengurusan: String, daerahKepengurusan: String, jabatan: String, signatureName: String): Promise<Buffer> {
+    async generateSignature(nomorSurat: string, tingkatKepengurusan: string, daerahKepengurusan: string, jabatan: string, signatureName: string): Promise<Buffer> {
         const dateNow = new Date();
         const formattedDate = formatFullDate(dateNow);
         const size = 600; // QR code size (600x600 pixels)

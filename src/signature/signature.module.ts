@@ -1,4 +1,4 @@
-// src/stamp/stamp.module.ts
+// src/signature/signature.module.ts
 
 import { Module } from '@nestjs/common';
 import { SignatureService } from './signature.service';
