@@ -18,39 +18,64 @@
                     <input type="text" id="nomorSurat" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm border p-2 focus:ring-blue-500 focus:border-blue-500" value="001">
                 </div>
                 <div>
-                    <label class="block text-sm font-medium text-gray-700">Kode Kepengurusan</label>
-                    <input type="text" id="kodeKepengurusan" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm border p-2" value="PP">
-                </div>
-                <div>
                     <label class="block text-sm font-medium text-gray-700">Kode Surat</label>
-                    <input type="text" id="kodeSurat" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm border p-2" value="A">
+                    <input type="text" id="kodeSurat" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm border p-2 focus:ring-blue-500 focus:border-blue-500" value="A">
                 </div>
-                <div>
-                    <label class="block text-sm font-medium text-gray-700">Tingkat Kepengurusan</label>
-                    <input type="text" id="tingkatKepengurusan" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm border p-2" value="Pusat">
-                </div>
-                <div>
-                    <label class="block text-sm font-medium text-gray-700">Daerah Kepengurusan</label>
-                    <input type="text" id="daerahKepengurusan" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm border p-2" value="Nasional">
+                
+                <div class="pt-2 border-t mt-4">
+                    <p class="text-xs text-gray-500 mb-2 font-semibold uppercase tracking-wider">Data Tetap (Fixed)</p>
+                    <div class="space-y-3">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700">Kode Kepengurusan</label>
+                            <input type="text" id="kodeKepengurusan" value="PP" readonly class="mt-1 block w-full rounded-md border-gray-300 shadow-sm border p-2 bg-gray-100 text-gray-600 cursor-not-allowed">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700">Tingkat Kepengurusan</label>
+                            <input type="text" id="tingkatKepengurusan" value="Pengurus Pusat" readonly class="mt-1 block w-full rounded-md border-gray-300 shadow-sm border p-2 bg-gray-100 text-gray-600 cursor-not-allowed">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700">Daerah Kepengurusan</label>
+                            <input type="text" id="daerahKepengurusan" value="Pondok Pesantren Lirboyo" readonly class="mt-1 block w-full rounded-md border-gray-300 shadow-sm border p-2 bg-gray-100 text-gray-600 cursor-not-allowed">
+                        </div>
+                    </div>
                 </div>
             </div>
 
             <div class="space-y-4">
-                <div>
-                    <label class="block text-sm font-medium text-gray-700">Jabatan Ketua</label>
-                    <input type="text" id="ketua" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm border p-2" value="Ketua Umum">
+                <div class="bg-blue-50 p-4 rounded-lg border border-blue-100 space-y-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700">Jabatan Ketua</label>
+                        <select id="ketua" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm border p-2 focus:ring-blue-500 focus:border-blue-500 bg-white">
+                            <option value="Ketua Umum">Ketua Umum</option>
+                            <option value="Ketua Satu">Ketua Satu</option>
+                            <option value="Ketua Dua">Ketua Dua</option>
+                            <option value="Ketua Tiga">Ketua Tiga</option>
+                            <option value="Ketua Empat">Ketua Empat</option>
+                            <option value="Ketua Lima">Ketua Lima</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700">Nama Ketua</label>
+                        <input type="text" id="ketuaName" readonly class="mt-1 block w-full rounded-md border-transparent shadow-sm border p-2 bg-white text-gray-800 font-semibold cursor-default">
+                    </div>
                 </div>
-                <div>
-                    <label class="block text-sm font-medium text-gray-700">Nama Ketua</label>
-                    <input type="text" id="ketuaName" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm border p-2" value="Ahmad Fulan">
-                </div>
-                <div>
-                    <label class="block text-sm font-medium text-gray-700">Jabatan Sekretaris</label>
-                    <input type="text" id="sekretaris" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm border p-2" value="Sekretaris Jenderal">
-                </div>
-                <div>
-                    <label class="block text-sm font-medium text-gray-700">Nama Sekretaris</label>
-                    <input type="text" id="sekretarisName" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm border p-2" value="Yusuf Fadlulloh">
+
+                <div class="bg-green-50 p-4 rounded-lg border border-green-100 space-y-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700">Jabatan Sekretaris</label>
+                        <select id="sekretaris" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm border p-2 focus:ring-green-500 focus:border-green-500 bg-white">
+                            <option value="Sekretaris Umum">Sekretaris Umum</option>
+                            <option value="Sekretaris Satu">Sekretaris Satu</option>
+                            <option value="Sekretaris Dua">Sekretaris Dua</option>
+                            <option value="Sekretaris Tiga">Sekretaris Tiga</option>
+                            <option value="Sekretaris Empat">Sekretaris Empat</option>
+                            <option value="Sekretaris Lima">Sekretaris Lima</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700">Nama Sekretaris</label>
+                        <input type="text" id="sekretarisName" readonly class="mt-1 block w-full rounded-md border-transparent shadow-sm border p-2 bg-white text-gray-800 font-semibold cursor-default">
+                    </div>
                 </div>
             </div>
 
@@ -73,21 +98,59 @@
             <div class="grid grid-cols-1 md:grid-cols-3 gap-6 text-center">
                 <div class="bg-gray-50 p-4 rounded-lg shadow border">
                     <p class="font-semibold text-gray-700 mb-2">Stempel</p>
-                    <img id="imgStamp" src="" alt="Stempel" class="mx-auto w-48 h-auto border">
+                    <img id="imgStamp" src="" alt="Stempel" class="mx-auto w-48 h-auto border bg-white">
                 </div>
                 <div class="bg-gray-50 p-4 rounded-lg shadow border">
                     <p class="font-semibold text-gray-700 mb-2">QR Ketua</p>
-                    <img id="imgKetua" src="" alt="Ketua" class="mx-auto w-48 h-auto border">
+                    <img id="imgKetua" src="" alt="Ketua" class="mx-auto w-48 h-auto border bg-white">
                 </div>
                 <div class="bg-gray-50 p-4 rounded-lg shadow border">
                     <p class="font-semibold text-gray-700 mb-2">QR Sekretaris</p>
-                    <img id="imgSekretaris" src="" alt="Sekretaris" class="mx-auto w-48 h-auto border">
+                    <img id="imgSekretaris" src="" alt="Sekretaris" class="mx-auto w-48 h-auto border bg-white">
                 </div>
             </div>
         </div>
     </div>
 
     <script>
+        // Data Pengurus berdasarkan gambar
+        const dataKetua = {
+            "Ketua Umum": "A. Zulfa Laday Robbi Sholeh",
+            "Ketua Satu": "M. Marzuqi Hamid",
+            "Ketua Dua": "H. Nururrohman Ya'lu",
+            "Ketua Tiga": "M. Yusuf Fadlulloh Abdurrohman",
+            "Ketua Empat": "A. Murtadlo Waridlo",
+            "Ketua Lima": "M. Faidul Haq Asyrofi"
+        };
+
+        const dataSekretaris = {
+            "Sekretaris Umum": "H. Abdurrohman Kafabihi",
+            "Sekretaris Satu": "Muh. Khoirun Ni'am Ali",
+            "Sekretaris Dua": "Moh. 'Ainur Rofiq AB",
+            "Sekretaris Tiga": "M. Zakariya Yasir",
+            "Sekretaris Empat": "M. Zakkiyu Nuha Mukhsin",
+            "Sekretaris Lima": "M. Khasib Afil Qorrobin Imam"
+        };
+
+        const elKetua = document.getElementById('ketua');
+        const elKetuaName = document.getElementById('ketuaName');
+        const elSekretaris = document.getElementById('sekretaris');
+        const elSekretarisName = document.getElementById('sekretarisName');
+
+        // Fungsi untuk update nama otomatis saat dropdown diganti
+        function updateNames() {
+            elKetuaName.value = dataKetua[elKetua.value];
+            elSekretarisName.value = dataSekretaris[elSekretaris.value];
+        }
+
+        // Event listener saat opsi dipilih
+        elKetua.addEventListener('change', updateNames);
+        elSekretaris.addEventListener('change', updateNames);
+
+        // Jalankan sekali saat halaman pertama kali dimuat
+        updateNames();
+
+        // Handle Submit API
         document.getElementById('qrForm').addEventListener('submit', async (e) => {
             e.preventDefault();
             
@@ -109,14 +172,13 @@
                 kodeSurat: document.getElementById('kodeSurat').value,
                 tingkatKepengurusan: document.getElementById('tingkatKepengurusan').value,
                 daerahKepengurusan: document.getElementById('daerahKepengurusan').value,
-                ketua: document.getElementById('ketua').value,
-                ketuaName: document.getElementById('ketuaName').value,
-                sekretaris: document.getElementById('sekretaris').value,
-                sekretarisName: document.getElementById('sekretarisName').value,
+                ketua: elKetua.value,
+                ketuaName: elKetuaName.value,
+                sekretaris: elSekretaris.value,
+                sekretarisName: elSekretarisName.value,
             };
 
             try {
-                // Tembak API NestJS kita sendiri
                 const response = await fetch('/generateQR', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
@@ -126,11 +188,9 @@
                 const data = await response.json();
 
                 if (data.status === 'success') {
-                    // Tampilkan pesan sukses
                     messageEl.textContent = '✅ Berkas berhasil di-generate!';
                     messageEl.className = 'mt-4 p-4 rounded-md bg-green-50 text-green-800';
                     
-                    // Tampilkan hasil gambar & link download
                     document.getElementById('downloadZip').href = data.data.zipUrl;
                     document.getElementById('imgStamp').src = data.data.individual.stamp;
                     document.getElementById('imgKetua').src = data.data.individual.ketua;
@@ -138,7 +198,6 @@
                     
                     resultSection.classList.remove('hidden');
                 } else {
-                    // Tampilkan pesan error dari backend
                     messageEl.textContent = '❌ Gagal: ' + (data.message || 'Terjadi kesalahan');
                     messageEl.className = 'mt-4 p-4 rounded-md bg-red-50 text-red-800';
                 }
@@ -146,7 +205,6 @@
                 messageEl.textContent = '❌ Error jaringan: ' + error.message;
                 messageEl.className = 'mt-4 p-4 rounded-md bg-red-50 text-red-800';
             } finally {
-                // Reset tombol
                 btn.disabled = false;
                 btn.innerHTML = 'Generate Berkas';
                 btn.classList.replace('bg-blue-400', 'bg-blue-600');
