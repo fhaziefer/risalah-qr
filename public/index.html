@@ -1,25 +1,39 @@
 <!DOCTYPE html>
-<html lang="id">
+<html lang="id" class="dark">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Generate QR LIM Pusat</title>
     <script src="https://cdn.tailwindcss.com"></script>
-</head>
-<body class="bg-gray-100 min-h-screen p-8">
-
-    <div class="max-w-4xl mx-auto bg-white p-8 rounded-xl shadow-lg">
-        <h1 class="text-3xl font-bold text-blue-700 mb-6 text-center">Generate QR LIM Pusat</h1>
+    <style>
+        /* Custom scrollbar untuk tampilan dark mode yang lebih elegan */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #09090b; }
+        ::-webkit-scrollbar-thumb { background: #27272a; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #3f3f46; }
         
-        <form id="qrForm" class="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div class="space-y-4">
+        /* Memperhalus tampilan select dropdown default browser */
+        select { color-scheme: dark; }
+    </style>
+</head>
+<body class="bg-zinc-950 text-zinc-300 min-h-screen p-6 md:p-12 font-sans selection:bg-zinc-800 selection:text-white">
+
+    <div class="max-w-4xl mx-auto bg-zinc-900/50 backdrop-blur-sm p-8 md:p-10 rounded-2xl border border-zinc-800/80 shadow-2xl">
+        
+        <div class="mb-10 text-center">
+            <h1 class="text-3xl font-light text-white tracking-wide">Generate QR <span class="font-bold">LIM Pusat</span></h1>
+            <p class="text-sm text-zinc-500 mt-2 tracking-widest">Risalah LIM Lirboyo</p>
+        </div>
+        
+        <form id="qrForm" class="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <div class="space-y-5">
                 <div>
-                    <label class="block text-sm font-medium text-gray-700">Nomor Surat</label>
-                    <input type="text" id="nomorSurat" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm border p-2 focus:ring-blue-500 focus:border-blue-500" value="001">
+                    <label class="block text-xs font-semibold text-zinc-400 uppercase tracking-wider mb-2">Nomor Surat</label>
+                    <input type="text" id="nomorSurat" required class="block w-full rounded-lg bg-zinc-950 border border-zinc-800 p-3 text-zinc-200 focus:outline-none focus:ring-1 focus:ring-zinc-500 focus:border-zinc-500 transition-all" value="001">
                 </div>
                 <div>
-                    <label class="block text-sm font-medium text-gray-700">Kode Surat</label>
-                    <select id="kodeSurat" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm border p-2 focus:ring-blue-500 focus:border-blue-500 bg-white">
+                    <label class="block text-xs font-semibold text-zinc-400 uppercase tracking-wider mb-2">Kode Surat</label>
+                    <select id="kodeSurat" required class="block w-full rounded-lg bg-zinc-950 border border-zinc-800 p-3 text-zinc-200 focus:outline-none focus:ring-1 focus:ring-zinc-500 focus:border-zinc-500 transition-all cursor-pointer">
                         <option value="A">A - Surat Keputusan</option>
                         <option value="B">B - Surat Undangan</option>
                         <option value="C">C - Surat Permohonan</option>
@@ -43,29 +57,30 @@
                     </select>
                 </div>
                 
-                <div class="pt-2 border-t mt-4">
-                    <div class="space-y-3">
+                <div class="pt-4 mt-6 border-t border-zinc-800/50">
+                    <p class="text-[10px] text-zinc-600 mb-4 font-bold uppercase tracking-[0.2em]">Data Permanen</p>
+                    <div class="space-y-4">
                         <div>
-                            <label class="block text-sm font-medium text-gray-700">Kode Kepengurusan</label>
-                            <input type="text" id="kodeKepengurusan" value="PP" readonly class="mt-1 block w-full rounded-md border-gray-300 shadow-sm border p-2 bg-gray-100 text-gray-600 cursor-not-allowed">
+                            <label class="block text-xs font-medium text-zinc-500 mb-1.5">Kode Kepengurusan</label>
+                            <input type="text" id="kodeKepengurusan" value="PP" readonly class="block w-full rounded-md border border-zinc-800/50 bg-zinc-900/50 p-2.5 text-zinc-500 cursor-not-allowed text-sm">
                         </div>
                         <div>
-                            <label class="block text-sm font-medium text-gray-700">Tingkat Kepengurusan</label>
-                            <input type="text" id="tingkatKepengurusan" value="Pengurus Pusat" readonly class="mt-1 block w-full rounded-md border-gray-300 shadow-sm border p-2 bg-gray-100 text-gray-600 cursor-not-allowed">
+                            <label class="block text-xs font-medium text-zinc-500 mb-1.5">Tingkat Kepengurusan</label>
+                            <input type="text" id="tingkatKepengurusan" value="Pengurus Pusat" readonly class="block w-full rounded-md border border-zinc-800/50 bg-zinc-900/50 p-2.5 text-zinc-500 cursor-not-allowed text-sm">
                         </div>
                         <div>
-                            <label class="block text-sm font-medium text-gray-700">Daerah Kepengurusan</label>
-                            <input type="text" id="daerahKepengurusan" value="Pondok Pesantren Lirboyo" readonly class="mt-1 block w-full rounded-md border-gray-300 shadow-sm border p-2 bg-gray-100 text-gray-600 cursor-not-allowed">
+                            <label class="block text-xs font-medium text-zinc-500 mb-1.5">Daerah Kepengurusan</label>
+                            <input type="text" id="daerahKepengurusan" value="Pondok Pesantren Lirboyo" readonly class="block w-full rounded-md border border-zinc-800/50 bg-zinc-900/50 p-2.5 text-zinc-500 cursor-not-allowed text-sm">
                         </div>
                     </div>
                 </div>
             </div>
 
-            <div class="space-y-4">
-                <div class="bg-blue-50 p-4 rounded-lg border border-blue-100 space-y-4">
+            <div class="space-y-6">
+                <div class="p-5 rounded-xl border border-zinc-800/80 bg-zinc-900/30 space-y-4">
                     <div>
-                        <label class="block text-sm font-medium text-gray-700">Jabatan Ketua</label>
-                        <select id="ketua" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm border p-2 focus:ring-blue-500 focus:border-blue-500 bg-white">
+                        <label class="block text-xs font-semibold text-zinc-400 uppercase tracking-wider mb-2">Jabatan Ketua</label>
+                        <select id="ketua" class="block w-full rounded-lg bg-zinc-950 border border-zinc-800 p-3 text-zinc-200 focus:outline-none focus:ring-1 focus:ring-zinc-500 focus:border-zinc-500 transition-all cursor-pointer">
                             <option value="Ketua Umum">Ketua Umum</option>
                             <option value="Ketua Satu">Ketua Satu</option>
                             <option value="Ketua Dua">Ketua Dua</option>
@@ -75,15 +90,15 @@
                         </select>
                     </div>
                     <div>
-                        <label class="block text-sm font-medium text-gray-700">Nama Ketua</label>
-                        <input type="text" id="ketuaName" readonly class="mt-1 block w-full rounded-md border-transparent shadow-sm border p-2 bg-white text-gray-800 font-semibold cursor-default">
+                        <label class="block text-xs font-semibold text-zinc-500 uppercase tracking-wider mb-2">Nama Ketua</label>
+                        <input type="text" id="ketuaName" readonly class="block w-full rounded-lg border border-zinc-800/50 bg-zinc-900 p-3 text-white font-medium cursor-default focus:outline-none">
                     </div>
                 </div>
 
-                <div class="bg-green-50 p-4 rounded-lg border border-green-100 space-y-4">
+                <div class="p-5 rounded-xl border border-zinc-800/80 bg-zinc-900/30 space-y-4">
                     <div>
-                        <label class="block text-sm font-medium text-gray-700">Jabatan Sekretaris</label>
-                        <select id="sekretaris" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm border p-2 focus:ring-green-500 focus:border-green-500 bg-white">
+                        <label class="block text-xs font-semibold text-zinc-400 uppercase tracking-wider mb-2">Jabatan Sekretaris</label>
+                        <select id="sekretaris" class="block w-full rounded-lg bg-zinc-950 border border-zinc-800 p-3 text-zinc-200 focus:outline-none focus:ring-1 focus:ring-zinc-500 focus:border-zinc-500 transition-all cursor-pointer">
                             <option value="Sekretaris Umum">Sekretaris Umum</option>
                             <option value="Sekretaris Satu">Sekretaris Satu</option>
                             <option value="Sekretaris Dua">Sekretaris Dua</option>
@@ -93,40 +108,49 @@
                         </select>
                     </div>
                     <div>
-                        <label class="block text-sm font-medium text-gray-700">Nama Sekretaris</label>
-                        <input type="text" id="sekretarisName" readonly class="mt-1 block w-full rounded-md border-transparent shadow-sm border p-2 bg-white text-gray-800 font-semibold cursor-default">
+                        <label class="block text-xs font-semibold text-zinc-500 uppercase tracking-wider mb-2">Nama Sekretaris</label>
+                        <input type="text" id="sekretarisName" readonly class="block w-full rounded-lg border border-zinc-800/50 bg-zinc-900 p-3 text-white font-medium cursor-default focus:outline-none">
                     </div>
                 </div>
             </div>
 
-            <div class="col-span-1 md:col-span-2 pt-4">
-                <button type="submit" id="submitBtn" class="w-full flex justify-center py-3 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors duration-200">
+            <div class="col-span-1 md:col-span-2 pt-6">
+                <button type="submit" id="submitBtn" class="w-full flex justify-center py-4 px-4 rounded-xl text-sm font-bold text-zinc-900 bg-zinc-100 hover:bg-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-zinc-950 focus:ring-zinc-300 transition-all duration-300 uppercase tracking-widest shadow-[0_0_15px_rgba(255,255,255,0.1)] hover:shadow-[0_0_25px_rgba(255,255,255,0.2)]">
                     Generate Berkas
                 </button>
             </div>
         </form>
 
-        <div id="message" class="hidden mt-4 p-4 rounded-md"></div>
+        <div id="message" class="hidden mt-6 p-4 rounded-lg text-sm border font-medium text-center tracking-wide"></div>
 
-        <div id="resultSection" class="hidden mt-8 border-t pt-8">
-            <h2 class="text-2xl font-bold text-gray-800 mb-4 text-center">Hasil Generate</h2>
-            <div class="flex justify-center mb-6">
-                <a id="downloadZip" href="#" class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-green-700 bg-green-100 hover:bg-green-200">
-                    📥 Download File ZIP Lengkap
+        <div id="resultSection" class="hidden mt-10 pt-10 border-t border-zinc-800">
+            <h2 class="text-xl font-light text-white mb-8 text-center tracking-wide">Hasil Berkas</h2>
+            
+            <div class="flex justify-center mb-10">
+                <a id="downloadZip" href="#" class="inline-flex items-center px-6 py-3 border border-zinc-700 rounded-lg text-sm font-semibold text-white bg-zinc-800 hover:bg-zinc-700 hover:border-zinc-500 transition-all duration-300 shadow-lg">
+                    <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
+                    Download File ZIP
                 </a>
             </div>
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 text-center">
-                <div class="bg-gray-50 p-4 rounded-lg shadow border">
-                    <p class="font-semibold text-gray-700 mb-2">Stempel</p>
-                    <img id="imgStamp" src="" alt="Stempel" class="mx-auto w-48 h-auto border bg-white">
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
+                <div class="flex flex-col items-center">
+                    <p class="text-xs font-semibold text-zinc-500 uppercase tracking-wider mb-4">Stempel</p>
+                    <div class="bg-zinc-200 p-3 rounded-xl shadow-inner inline-block">
+                        <img id="imgStamp" src="" alt="Stempel" class="w-48 h-auto mix-blend-multiply">
+                    </div>
                 </div>
-                <div class="bg-gray-50 p-4 rounded-lg shadow border">
-                    <p class="font-semibold text-gray-700 mb-2">QR Ketua</p>
-                    <img id="imgKetua" src="" alt="Ketua" class="mx-auto w-48 h-auto border bg-white">
+                <div class="flex flex-col items-center">
+                    <p class="text-xs font-semibold text-zinc-500 uppercase tracking-wider mb-4">QR Ketua</p>
+                    <div class="bg-zinc-200 p-3 rounded-xl shadow-inner inline-block">
+                        <img id="imgKetua" src="" alt="Ketua" class="w-48 h-auto mix-blend-multiply">
+                    </div>
                 </div>
-                <div class="bg-gray-50 p-4 rounded-lg shadow border">
-                    <p class="font-semibold text-gray-700 mb-2">QR Sekretaris</p>
-                    <img id="imgSekretaris" src="" alt="Sekretaris" class="mx-auto w-48 h-auto border bg-white">
+                <div class="flex flex-col items-center">
+                    <p class="text-xs font-semibold text-zinc-500 uppercase tracking-wider mb-4">QR Sekretaris</p>
+                    <div class="bg-zinc-200 p-3 rounded-xl shadow-inner inline-block">
+                        <img id="imgSekretaris" src="" alt="Sekretaris" class="w-48 h-auto mix-blend-multiply">
+                    </div>
                 </div>
             </div>
         </div>
@@ -180,10 +204,10 @@
             
             // Set loading state
             btn.disabled = true;
-            btn.innerHTML = 'Memproses... ⏳';
-            btn.classList.replace('bg-blue-600', 'bg-blue-400');
+            btn.innerHTML = '<svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-zinc-900 inline-block" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg> MEMPROSES...';
+            btn.classList.add('opacity-80', 'cursor-not-allowed');
             messageEl.className = 'hidden';
-            resultSection.className = 'hidden mt-8 border-t pt-8';
+            resultSection.className = 'hidden mt-10 pt-10 border-t border-zinc-800';
 
             // Ambil data dari form
             const payload = {
@@ -208,8 +232,9 @@
                 const data = await response.json();
 
                 if (data.status === 'success') {
-                    messageEl.textContent = '✅ Berkas berhasil di-generate!';
-                    messageEl.className = 'mt-4 p-4 rounded-md bg-green-50 text-green-800';
+                    // Tema Monochrome Success
+                    messageEl.innerHTML = '&#10003; BERKAS BERHASIL DIGENERATE';
+                    messageEl.className = 'mt-6 p-4 rounded-lg text-sm font-bold text-center tracking-widest border border-zinc-700 bg-zinc-800/50 text-white';
                     
                     document.getElementById('downloadZip').href = data.data.zipUrl;
                     document.getElementById('imgStamp').src = data.data.individual.stamp;
@@ -218,16 +243,17 @@
                     
                     resultSection.classList.remove('hidden');
                 } else {
-                    messageEl.textContent = '❌ Gagal: ' + (data.message || 'Terjadi kesalahan');
-                    messageEl.className = 'mt-4 p-4 rounded-md bg-red-50 text-red-800';
+                    // Tema Monochrome Error
+                    messageEl.innerHTML = '&#9888; GAGAL: ' + (data.message || 'TERJADI KESALAHAN').toUpperCase();
+                    messageEl.className = 'mt-6 p-4 rounded-lg text-sm font-bold text-center tracking-widest border border-zinc-700 bg-zinc-900 text-zinc-300';
                 }
             } catch (error) {
-                messageEl.textContent = '❌ Error jaringan: ' + error.message;
-                messageEl.className = 'mt-4 p-4 rounded-md bg-red-50 text-red-800';
+                messageEl.innerHTML = '&#9888; ERROR JARINGAN: ' + error.message.toUpperCase();
+                messageEl.className = 'mt-6 p-4 rounded-lg text-sm font-bold text-center tracking-widest border border-zinc-700 bg-zinc-900 text-zinc-300';
             } finally {
                 btn.disabled = false;
-                btn.innerHTML = 'Generate Berkas';
-                btn.classList.replace('bg-blue-400', 'bg-blue-600');
+                btn.innerHTML = 'GENERATE BERKAS';
+                btn.classList.remove('opacity-80', 'cursor-not-allowed');
             }
         });
     </script>
