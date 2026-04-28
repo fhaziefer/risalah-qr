@@ -3,17 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Generate QR LIM Pusat</title>
+    <title>Sistem QR & Stempel LIM</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        /* Custom scrollbar untuk tampilan dark mode yang lebih elegan */
         ::-webkit-scrollbar { width: 8px; }
         ::-webkit-scrollbar-track { background: #09090b; }
         ::-webkit-scrollbar-thumb { background: #27272a; border-radius: 4px; }
         ::-webkit-scrollbar-thumb:hover { background: #3f3f46; }
-        
-        /* Memperhalus tampilan select dropdown default browser */
         select { color-scheme: dark; }
+        
+        /* Hilangkan panah dropdown jika readonly di browser tertentu */
+        input[readonly] { cursor: not-allowed; }
     </style>
 </head>
 <body class="bg-zinc-950 text-zinc-300 min-h-screen p-6 md:p-12 font-sans selection:bg-zinc-800 selection:text-white">
@@ -21,66 +21,76 @@
     <div class="max-w-4xl mx-auto bg-zinc-900/50 backdrop-blur-sm p-8 md:p-10 rounded-2xl border border-zinc-800/80 shadow-2xl">
         
         <div class="mb-10 text-center">
-            <h1 class="text-3xl font-light text-white tracking-wide">Generate QR <span class="font-bold">LIM Pusat</span></h1>
-            <p class="text-sm text-zinc-500 mt-2 tracking-widest">Risalah LIM Lirboyo</p>
+            <h1 class="text-3xl font-light text-white tracking-wide">Generate QR <span class="font-bold">LIM</span></h1>
+            <p class="text-sm text-zinc-500 mt-2 tracking-widest uppercase">Sistem Administrasi Digital Terpusat</p>
         </div>
         
         <form id="qrForm" class="grid grid-cols-1 md:grid-cols-2 gap-8">
-            <div class="space-y-5">
-                <div>
-                    <label class="block text-xs font-semibold text-zinc-400 uppercase tracking-wider mb-2">Nomor Surat</label>
-                    <input type="text" id="nomorSurat" required class="block w-full rounded-lg bg-zinc-950 border border-zinc-800 p-3 text-zinc-200 focus:outline-none focus:ring-1 focus:ring-zinc-500 focus:border-zinc-500 transition-all" value="001">
-                </div>
-                <div>
-                    <label class="block text-xs font-semibold text-zinc-400 uppercase tracking-wider mb-2">Kode Surat</label>
-                    <select id="kodeSurat" required class="block w-full rounded-lg bg-zinc-950 border border-zinc-800 p-3 text-zinc-200 focus:outline-none focus:ring-1 focus:ring-zinc-500 focus:border-zinc-500 transition-all cursor-pointer">
-                        <option value="A">A - Surat Keputusan</option>
-                        <option value="B">B - Surat Undangan</option>
-                        <option value="C">C - Surat Permohonan</option>
-                        <option value="D">D - Surat Pemberitahuan</option>
-                        <option value="E">E - Surat Instruksi</option>
-                        <option value="F">F - Surat Pengantar</option>
-                        <option value="G">G - Surat Jawaban Permohonan</option>
-                        <option value="H">H - Surat Tugas/Mandat Tugas</option>
-                        <option value="I">I - Surat Kuasa</option>
-                        <option value="J">J - Surat Rekomendasi</option>
-                        <option value="K">K - Surat Pernyataan</option>
-                        <option value="L">L - Surat Peringatan</option>
-                        <option value="M">M - Surat Pengumuman</option>
-                        <option value="N">N - Surat Perjanjian</option>
-                        <option value="O">O - Surat Edaran</option>
-                        <option value="P">P - Berita Acara</option>
-                        <option value="Q">Q - Nota Dinas</option>
-                        <option value="R">R - Surat Keterangan</option>
-                        <option value="S">S - Laporan</option>
-                        <option value="T">T - Notulen Rapat</option>
-                    </select>
+            <div class="space-y-6">
+                <div class="space-y-5">
+                    <div>
+                        <label class="block text-xs font-semibold text-zinc-400 uppercase tracking-wider mb-2">Nomor Surat</label>
+                        <input type="text" id="nomorSurat" required class="block w-full rounded-lg bg-zinc-950 border border-zinc-800 p-3 text-zinc-200 focus:outline-none focus:ring-1 focus:ring-zinc-500 focus:border-zinc-500 transition-all" value="001">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-zinc-400 uppercase tracking-wider mb-2">Kode Surat</label>
+                        <select id="kodeSurat" required class="block w-full rounded-lg bg-zinc-950 border border-zinc-800 p-3 text-zinc-200 focus:outline-none focus:ring-1 focus:ring-zinc-500 focus:border-zinc-500 transition-all cursor-pointer">
+                            <option value="A">A - Surat Keputusan</option>
+                            <option value="B">B - Surat Undangan</option>
+                            <option value="C">C - Surat Permohonan</option>
+                            <option value="D">D - Surat Pemberitahuan</option>
+                            <option value="E">E - Surat Instruksi</option>
+                            <option value="F">F - Surat Pengantar</option>
+                            <option value="G">G - Surat Jawaban Permohonan</option>
+                            <option value="H">H - Surat Tugas/Mandat Tugas</option>
+                            <option value="I">I - Surat Kuasa</option>
+                            <option value="J">J - Surat Rekomendasi</option>
+                            <option value="K">K - Surat Pernyataan</option>
+                            <option value="L">L - Surat Peringatan</option>
+                            <option value="M">M - Surat Pengumuman</option>
+                            <option value="N">N - Surat Perjanjian</option>
+                            <option value="O">O - Surat Edaran</option>
+                            <option value="P">P - Berita Acara</option>
+                            <option value="Q">Q - Nota Dinas</option>
+                            <option value="R">R - Surat Keterangan</option>
+                            <option value="S">S - Laporan</option>
+                            <option value="T">T - Notulen Rapat</option>
+                        </select>
+                    </div>
                 </div>
                 
-                <div class="pt-4 mt-6 border-t border-zinc-800/50">
-                    <p class="text-[10px] text-zinc-600 mb-4 font-bold uppercase tracking-[0.2em]">Data Permanen</p>
-                    <div class="space-y-4">
-                        <div>
-                            <label class="block text-xs font-medium text-zinc-500 mb-1.5">Kode Kepengurusan</label>
-                            <input type="text" id="kodeKepengurusan" value="PP" readonly class="block w-full rounded-md border border-zinc-800/50 bg-zinc-900/50 p-2.5 text-zinc-500 cursor-not-allowed text-sm">
-                        </div>
-                        <div>
-                            <label class="block text-xs font-medium text-zinc-500 mb-1.5">Tingkat Kepengurusan</label>
-                            <input type="text" id="tingkatKepengurusan" value="Pengurus Pusat" readonly class="block w-full rounded-md border border-zinc-800/50 bg-zinc-900/50 p-2.5 text-zinc-500 cursor-not-allowed text-sm">
-                        </div>
-                        <div>
-                            <label class="block text-xs font-medium text-zinc-500 mb-1.5">Daerah Kepengurusan</label>
-                            <input type="text" id="daerahKepengurusan" value="Pondok Pesantren Lirboyo" readonly class="block w-full rounded-md border border-zinc-800/50 bg-zinc-900/50 p-2.5 text-zinc-500 cursor-not-allowed text-sm">
-                        </div>
+                <div class="pt-4 border-t border-zinc-800/50 space-y-5">
+                    <p class="text-[10px] text-zinc-600 font-bold uppercase tracking-[0.2em]">Data Hierarki Kepengurusan</p>
+                    <div>
+                        <label class="block text-xs font-medium text-zinc-400 mb-1.5">Tingkat Kepengurusan</label>
+                        <select id="tingkatKepengurusan" class="block w-full rounded-lg bg-zinc-950 border border-zinc-800 p-3 text-zinc-200 focus:outline-none focus:ring-1 focus:ring-zinc-500 transition-all cursor-pointer">
+                            <option value="Pengurus Pusat">Pengurus Pusat (PP)</option>
+                            <option value="Pengurus Wilayah">Pengurus Wilayah (PW)</option>
+                            <option value="Pengurus Cabang">Pengurus Cabang (PC)</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-medium text-zinc-400 mb-1.5">Daerah Kepengurusan</label>
+                        <select id="daerahKepengurusan" class="block w-full rounded-lg bg-zinc-950 border border-zinc-800 p-3 text-zinc-200 focus:outline-none focus:ring-1 focus:ring-zinc-500 transition-all cursor-pointer">
+                            </select>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-medium text-zinc-500 mb-1.5">Kode Registrasi (Auto-fill)</label>
+                        <input type="text" id="kodeKepengurusan" readonly class="block w-full rounded-md border border-zinc-800/50 bg-zinc-900/50 p-2.5 text-zinc-500 font-mono tracking-wider cursor-not-allowed text-sm">
                     </div>
                 </div>
             </div>
 
             <div class="space-y-6">
+                <p class="text-[10px] text-zinc-600 font-bold uppercase tracking-[0.2em] mb-2 hidden md:block">&nbsp;</p>
+                
                 <div class="p-5 rounded-xl border border-zinc-800/80 bg-zinc-900/30 space-y-4">
+                    <div class="flex items-center justify-between mb-2">
+                        <label class="block text-xs font-semibold text-zinc-400 uppercase tracking-wider">Data Ketua</label>
+                        <span id="badgeKetua" class="text-[10px] text-zinc-400 bg-zinc-800 px-2 py-1 rounded border border-zinc-700">Auto-fill (Pusat)</span>
+                    </div>
                     <div>
-                        <label class="block text-xs font-semibold text-zinc-400 uppercase tracking-wider mb-2">Jabatan Ketua</label>
-                        <select id="ketua" class="block w-full rounded-lg bg-zinc-950 border border-zinc-800 p-3 text-zinc-200 focus:outline-none focus:ring-1 focus:ring-zinc-500 focus:border-zinc-500 transition-all cursor-pointer">
+                        <select id="ketua" class="block w-full rounded-lg bg-zinc-950 border border-zinc-800 p-3 text-zinc-200 focus:outline-none focus:ring-1 focus:ring-zinc-500 transition-all cursor-pointer mb-3">
                             <option value="Ketua Umum">Ketua Umum</option>
                             <option value="Ketua Satu">Ketua Satu</option>
                             <option value="Ketua Dua">Ketua Dua</option>
@@ -88,17 +98,17 @@
                             <option value="Ketua Empat">Ketua Empat</option>
                             <option value="Ketua Lima">Ketua Lima</option>
                         </select>
-                    </div>
-                    <div>
-                        <label class="block text-xs font-semibold text-zinc-500 uppercase tracking-wider mb-2">Nama Ketua</label>
-                        <input type="text" id="ketuaName" readonly class="block w-full rounded-lg border border-zinc-800/50 bg-zinc-900 p-3 text-white font-medium cursor-default focus:outline-none">
+                        <input type="text" id="ketuaName" placeholder="Ketik Nama Lengkap Ketua" class="block w-full rounded-lg border border-zinc-800/50 bg-zinc-900 p-3 text-white font-medium focus:outline-none focus:border-zinc-500 transition-all">
                     </div>
                 </div>
 
                 <div class="p-5 rounded-xl border border-zinc-800/80 bg-zinc-900/30 space-y-4">
+                    <div class="flex items-center justify-between mb-2">
+                        <label class="block text-xs font-semibold text-zinc-400 uppercase tracking-wider">Data Sekretaris</label>
+                        <span id="badgeSekre" class="text-[10px] text-zinc-400 bg-zinc-800 px-2 py-1 rounded border border-zinc-700">Auto-fill (Pusat)</span>
+                    </div>
                     <div>
-                        <label class="block text-xs font-semibold text-zinc-400 uppercase tracking-wider mb-2">Jabatan Sekretaris</label>
-                        <select id="sekretaris" class="block w-full rounded-lg bg-zinc-950 border border-zinc-800 p-3 text-zinc-200 focus:outline-none focus:ring-1 focus:ring-zinc-500 focus:border-zinc-500 transition-all cursor-pointer">
+                        <select id="sekretaris" class="block w-full rounded-lg bg-zinc-950 border border-zinc-800 p-3 text-zinc-200 focus:outline-none focus:ring-1 focus:ring-zinc-500 transition-all cursor-pointer mb-3">
                             <option value="Sekretaris Umum">Sekretaris Umum</option>
                             <option value="Sekretaris Satu">Sekretaris Satu</option>
                             <option value="Sekretaris Dua">Sekretaris Dua</option>
@@ -106,12 +116,10 @@
                             <option value="Sekretaris Empat">Sekretaris Empat</option>
                             <option value="Sekretaris Lima">Sekretaris Lima</option>
                         </select>
-                    </div>
-                    <div>
-                        <label class="block text-xs font-semibold text-zinc-500 uppercase tracking-wider mb-2">Nama Sekretaris</label>
-                        <input type="text" id="sekretarisName" readonly class="block w-full rounded-lg border border-zinc-800/50 bg-zinc-900 p-3 text-white font-medium cursor-default focus:outline-none">
+                        <input type="text" id="sekretarisName" placeholder="Ketik Nama Lengkap Sekretaris" class="block w-full rounded-lg border border-zinc-800/50 bg-zinc-900 p-3 text-white font-medium focus:outline-none focus:border-zinc-500 transition-all">
                     </div>
                 </div>
+
             </div>
 
             <div class="col-span-1 md:col-span-2 pt-6">
@@ -157,69 +165,142 @@
     </div>
 
     <script>
-        // Data Pengurus berdasarkan gambar
-        const dataKetua = {
-            "Ketua Umum": "A. Zulfa Laday Robbi Sholeh",
-            "Ketua Satu": "M. Marzuqi Hamid",
-            "Ketua Dua": "H. Nururrohman Ya'lu",
-            "Ketua Tiga": "M. Yusuf Fadlulloh Abdurrohman",
-            "Ketua Empat": "A. Murtadlo Waridlo",
-            "Ketua Lima": "M. Faidul Haq Asyrofi"
+        // --- DATABASE KODE POA LIM --- //
+        const dataWilayah = [
+            {k:"PW.I", n:"Jawa Timur"}, {k:"PW.II", n:"Jawa Tengah"}, {k:"PW.III", n:"Daerah Istimewa Yogyakarta"},
+            {k:"PW.IV", n:"Jawa Barat"}, {k:"PW.V", n:"Jabodetabek"}, {k:"PW.VI", n:"Banten"}, {k:"PW.VII", n:"Lampung"},
+            {k:"PW.VIII", n:"Sumatera Selatan"}, {k:"PW.IX", n:"Bangka Belitung"}, {k:"PW.X", n:"Bengkulu"},
+            {k:"PW.XI", n:"Jambi"}, {k:"PW.XII", n:"Riau"}, {k:"PW.XIV", n:"Sumatera Utara"}, {k:"PW.XVIII", n:"Aceh"},
+            {k:"PW.XIX", n:"Kalimantan Timur"}, {k:"PW.XX", n:"Kalimantan Barat"}, {k:"PW.XXI", n:"Bali"}
+        ];
+
+        const dataCabang = [
+            // Jatim
+            {k:"PC.I.1", n:"Cabang Kediri"}, {k:"PC.I.2", n:"Cabang Nganjuk"}, {k:"PC.I.3", n:"Cabang Blitar"}, {k:"PC.I.4", n:"Cabang Tulungagung"}, {k:"PC.I.5", n:"Cabang Trenggalek"}, {k:"PC.I.6", n:"Cabang Jombang"}, {k:"PC.I.7", n:"Cabang Mojokerto"}, {k:"PC.I.8", n:"Cabang Surabaya"}, {k:"PC.I.9", n:"Cabang Sidoarjo"}, {k:"PC.I.10", n:"Cabang Malang Raya"}, {k:"PC.I.11", n:"Cabang Pasuruan"}, {k:"PC.I.12", n:"Cabang Probolinggo"}, {k:"PC.I.13", n:"Cabang Jember"}, {k:"PC.I.14", n:"Cabang Lumajang"}, {k:"PC.I.15", n:"Cabang Bondowoso & Situbondo"}, {k:"PC.I.16", n:"Cabang Banyuwangi"}, {k:"PC.I.17", n:"Cabang Ponorogo"}, {k:"PC.I.18", n:"Cabang Magetan"}, {k:"PC.I.19", n:"Cabang Ngawi"}, {k:"PC.I.20", n:"Cabang Madiun"}, {k:"PC.I.21", n:"Cabang Pacitan"}, {k:"PC.I.22", n:"Cabang Bojonegoro"}, {k:"PC.I.23", n:"Cabang Tuban"}, {k:"PC.I.24", n:"Cabang Lamongan"}, {k:"PC.I.25", n:"Cabang Bangkalan"}, {k:"PC.I.26", n:"Cabang Sampang"}, {k:"PC.I.27", n:"Cabang Pamekasan"}, {k:"PC.I.28", n:"Cabang Sumenep"},
+            // Jateng
+            {k:"PC.II.1", n:"Cabang Sragen"}, {k:"PC.II.2", n:"Cabang Karanganyar"}, {k:"PC.II.3", n:"Cabang Boyolali"}, {k:"PC.II.4", n:"Cabang Wonogiri"}, {k:"PC.II.5", n:"Cabang Klaten"}, {k:"PC.II.6", n:"Cabang Rembang"}, {k:"PC.II.7", n:"Cabang Blora"}, {k:"PC.II.8", n:"Cabang Pati"}, {k:"PC.II.9", n:"Cabang Grobogan"}, {k:"PC.II.10", n:"Cabang Demak"}, {k:"PC.II.11", n:"Cabang Kudus"}, {k:"PC.II.12", n:"Cabang Jepara"}, {k:"PC.II.13", n:"Cabang Semarang & Salatiga"}, {k:"PC.II.14", n:"Cabang Kota Semarang"}, {k:"PC.II.15", n:"Cabang Kendal"}, {k:"PC.II.16", n:"Cabang Magelang"}, {k:"PC.II.17", n:"Cabang Purworejo"}, {k:"PC.II.18", n:"Cabang Temanggung"}, {k:"PC.II.19", n:"Cabang Wonosobo"}, {k:"PC.II.20", n:"Cabang Banjarnegara"}, {k:"PC.II.21", n:"Cabang Kebumen"}, {k:"PC.II.22", n:"Cabang Purbalingga"}, {k:"PC.II.23", n:"Cabang Banyumas"}, {k:"PC.II.24", n:"Cabang Cilacap"}, {k:"PC.II.25", n:"Cabang Pekalongan"}, {k:"PC.II.26", n:"Cabang Pemalang"}, {k:"PC.II.27", n:"Cabang Batang"}, {k:"PC.II.28", n:"Cabang Brebes"}, {k:"PC.II.29", n:"Cabang Tegal"},
+            // Jabar
+            {k:"PC.V.1", n:"Cabang Cirebon (Jabar)"}, {k:"PC.V.2", n:"Cabang Indramayu (Jabar)"}, {k:"PC.V.3", n:"Cabang Karawang - Purwakarta"}, {k:"PC.V.4", n:"Cabang Subang"}, {k:"PC.V.5", n:"Cabang Kuningan"}, {k:"PC.V.6", n:"Cabang Priangan"}, {k:"PC.V.7", n:"Cabang Priangan Timur"}, {k:"PC.V.8", n:"Cabang Majalengka"}, {k:"PC.V.9", n:"Cabang Cianjur"}, {k:"PC.V.10", n:"Cabang Sukabumi"},
+            // Jabodetabek
+            {k:"PC.V.1", n:"Cabang Depok & Bogor"}, {k:"PC.V.2", n:"Cabang Jakarta Timur & Pusat"}, {k:"PC.V.3", n:"Cabang Jakarta Barat"}, {k:"PC.V.4", n:"Cabang Jakata Utara"}, {k:"PC.V.5", n:"Cabang Jakarta Selatan"}, {k:"PC.V.6", n:"Cabang Bekasi Raya"}, {k:"PC.V.7", n:"Cabang Tangerang Raya"},
+            // Banten
+            {k:"PC.VI.1", n:"Cabang Kota Pandeglang"}, {k:"PC.VI.2", n:"Cabang Lebak"}, {k:"PC.VI.3", n:"Cabang Kota Serang"}, {k:"PC.VI.4", n:"Cabang Serang Barat"}, {k:"PC.VI.5", n:"Cabang Serang Timur"}, {k:"PC.VI.6", n:"Cabang Kab. Pandeglang"}, {k:"PC.VI.7", n:"Cabang Tangerang"},
+            // Lampung
+            {k:"PC.VII.1", n:"Cabang Pringsewu"}, {k:"PC.VII.2", n:"Cabang Tanggamus"}, {k:"PC.VII.3", n:"Cabang Lampung Timur"}, {k:"PC.VII.4", n:"Cabang Lampung Selatan"}, {k:"PC.VII.5", n:"Cabang Tulang Bawang"}, {k:"PC.VII.6", n:"Cabang Pesawaran"}, {k:"PC.VII.7", n:"Cabang Lampung Tengah"}, {k:"PC.VII.8", n:"Cabang Way Kanan"}, {k:"PC.VII.9", n:"Cabang Mesuji"}, {k:"PC.VII.10", n:"Cabang Lampung Barat"}, {k:"PC.VII.11", n:"Cabang Lampung Utara"}, {k:"PC.VII.12", n:"Cabang Bandar Lampung"}, {k:"PC.VII.13", n:"Cabang Tulang Bawang Barat"}
+        ];
+
+        // --- DATA PENGURUS PUSAT (FIXED) --- //
+        const dataKetuaPP = {
+            "Ketua Umum": "A. Zulfa Laday Robbi Sholeh", "Ketua Satu": "M. Marzuqi Hamid", "Ketua Dua": "H. Nururrohman Ya'lu", "Ketua Tiga": "M. Yusuf Fadlulloh Abdurrohman", "Ketua Empat": "A. Murtadlo Waridlo", "Ketua Lima": "M. Faidul Haq Asyrofi"
+        };
+        const dataSekretarisPP = {
+            "Sekretaris Umum": "H. Abdurrohman Kafabihi", "Sekretaris Satu": "Muh. Khoirun Ni'am Ali", "Sekretaris Dua": "Moh. 'Ainur Rofiq AB", "Sekretaris Tiga": "M. Zakariya Yasir", "Sekretaris Empat": "M. Zakkiyu Nuha Mukhsin", "Sekretaris Lima": "M. Khasib Afil Qorrobin Imam"
         };
 
-        const dataSekretaris = {
-            "Sekretaris Umum": "H. Abdurrohman Kafabihi",
-            "Sekretaris Satu": "Muh. Khoirun Ni'am Ali",
-            "Sekretaris Dua": "Moh. 'Ainur Rofiq AB",
-            "Sekretaris Tiga": "M. Zakariya Yasir",
-            "Sekretaris Empat": "M. Zakkiyu Nuha Mukhsin",
-            "Sekretaris Lima": "M. Khasib Afil Qorrobin Imam"
-        };
-
+        // --- DOM ELEMENTS --- //
+        const elTingkat = document.getElementById('tingkatKepengurusan');
+        const elDaerah = document.getElementById('daerahKepengurusan');
+        const elKode = document.getElementById('kodeKepengurusan');
+        
         const elKetua = document.getElementById('ketua');
         const elKetuaName = document.getElementById('ketuaName');
-        const elSekretaris = document.getElementById('sekretaris');
-        const elSekretarisName = document.getElementById('sekretarisName');
+        const badgeKetua = document.getElementById('badgeKetua');
+        
+        const elSekre = document.getElementById('sekretaris');
+        const elSekreName = document.getElementById('sekretarisName');
+        const badgeSekre = document.getElementById('badgeSekre');
 
-        // Fungsi untuk update nama otomatis saat dropdown diganti
-        function updateNames() {
-            elKetuaName.value = dataKetua[elKetua.value];
-            elSekretarisName.value = dataSekretaris[elSekretaris.value];
+        // --- LOGIC HIERARKI KEPENGURUSAN --- //
+        function updateUI() {
+            const tingkat = elTingkat.value;
+            elDaerah.innerHTML = ''; 
+
+            if (tingkat === 'Pengurus Pusat') {
+                elDaerah.innerHTML = '<option value="PP" data-nama="Pondok Pesantren Lirboyo">Pondok Pesantren Lirboyo</option>';
+                
+                // Mode Pusat: Kunci kolom nama, ubah gaya ke read-only
+                [elKetuaName, elSekreName].forEach(el => {
+                    el.readOnly = true;
+                    el.classList.replace('bg-zinc-950', 'bg-zinc-900');
+                    el.required = false;
+                });
+                
+                // Update text badge
+                badgeKetua.textContent = 'Auto-fill (Pusat)';
+                badgeSekre.textContent = 'Auto-fill (Pusat)';
+                
+                updateNamesPP(); // Isi otomatis namanya
+            } else {
+                if (tingkat === 'Pengurus Wilayah') {
+                    dataWilayah.forEach(pw => { elDaerah.innerHTML += `<option value="${pw.k}" data-nama="${pw.n}">${pw.k} - ${pw.n}</option>`; });
+                } else {
+                    dataCabang.forEach(pc => { elDaerah.innerHTML += `<option value="${pc.k}" data-nama="${pc.n}">${pc.k} - ${pc.n}</option>`; });
+                }
+
+                // Mode Manual: Buka kunci kolom nama, kosongkan isinya
+                [elKetuaName, elSekreName].forEach(el => {
+                    el.readOnly = false;
+                    el.classList.replace('bg-zinc-900', 'bg-zinc-950');
+                    el.value = '';
+                    el.required = true;
+                });
+                
+                // Update text badge
+                badgeKetua.textContent = 'Ketik Manual';
+                badgeSekre.textContent = 'Ketik Manual';
+            }
+            updateKode();
         }
 
-        // Event listener saat opsi dipilih
-        elKetua.addEventListener('change', updateNames);
-        elSekretaris.addEventListener('change', updateNames);
+        function updateKode() {
+            elKode.value = elDaerah.value;
+        }
 
-        // Jalankan sekali saat halaman pertama kali dimuat
-        updateNames();
+        function updateNamesPP() {
+            // Hanya jalankan auto-fill jika yang terpilih adalah Pengurus Pusat
+            if (elTingkat.value === 'Pengurus Pusat') {
+                elKetuaName.value = dataKetuaPP[elKetua.value];
+                elSekreName.value = dataSekretarisPP[elSekre.value];
+            }
+        }
 
-        // Handle Submit API
+        // --- EVENT LISTENERS --- //
+        elTingkat.addEventListener('change', updateUI);
+        elDaerah.addEventListener('change', updateKode);
+        elKetua.addEventListener('change', updateNamesPP);
+        elSekre.addEventListener('change', updateNamesPP);
+
+        // INISIALISASI AWAL
+        updateUI();
+
+        // --- HANDLE SUBMIT API --- //
         document.getElementById('qrForm').addEventListener('submit', async (e) => {
             e.preventDefault();
-            
             const btn = document.getElementById('submitBtn');
             const messageEl = document.getElementById('message');
             const resultSection = document.getElementById('resultSection');
             
-            // Set loading state
             btn.disabled = true;
             btn.innerHTML = '<svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-zinc-900 inline-block" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg> MEMPROSES...';
             btn.classList.add('opacity-80', 'cursor-not-allowed');
             messageEl.className = 'hidden';
             resultSection.className = 'hidden mt-10 pt-10 border-t border-zinc-800';
 
-            // Ambil data dari form
-            const payload = {
+            // Ekstrak nama daerah asli (tanpa kode di depannya)
+            const selectedOption = elDaerah.options[elDaerah.selectedIndex];
+            const namaDaerahAsli = selectedOption.getAttribute('data-nama');
+
+            // Susun Payload
+            let payload = {
                 nomorSurat: document.getElementById('nomorSurat').value,
-                kodeKepengurusan: document.getElementById('kodeKepengurusan').value,
                 kodeSurat: document.getElementById('kodeSurat').value,
-                tingkatKepengurusan: document.getElementById('tingkatKepengurusan').value,
-                daerahKepengurusan: document.getElementById('daerahKepengurusan').value,
+                tingkatKepengurusan: elTingkat.value,
+                kodeKepengurusan: elKode.value,
+                daerahKepengurusan: namaDaerahAsli,
                 ketua: elKetua.value,
                 ketuaName: elKetuaName.value,
-                sekretaris: elSekretaris.value,
-                sekretarisName: elSekretarisName.value,
+                sekretaris: elSekre.value,
+                sekretarisName: elSekreName.value
             };
 
             try {
@@ -228,11 +309,9 @@
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(payload)
                 });
-
                 const data = await response.json();
 
                 if (data.status === 'success') {
-                    // Tema Monochrome Success
                     messageEl.innerHTML = '&#10003; BERKAS BERHASIL DIGENERATE';
                     messageEl.className = 'mt-6 p-4 rounded-lg text-sm font-bold text-center tracking-widest border border-zinc-700 bg-zinc-800/50 text-white';
                     
@@ -243,7 +322,6 @@
                     
                     resultSection.classList.remove('hidden');
                 } else {
-                    // Tema Monochrome Error
                     messageEl.innerHTML = '&#9888; GAGAL: ' + (data.message || 'TERJADI KESALAHAN').toUpperCase();
                     messageEl.className = 'mt-6 p-4 rounded-lg text-sm font-bold text-center tracking-widest border border-zinc-700 bg-zinc-900 text-zinc-300';
                 }
